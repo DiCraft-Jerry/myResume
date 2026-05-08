@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>甘浩成 - Java开发工程师 简历</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-card: #111827;
+    --bg-card-hover: #1a2332;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #8b5cf6;
+    --accent-green: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-rose: #f43f5e;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: #1e293b;
+    --glow-blue: rgba(59, 130, 246, 0.15);
+    --glow-cyan: rgba(6, 182, 212, 0.15);
+  }
+
+  html, body { height: 100%; overflow: hidden; background: var(--bg-primary); color: var(--text-primary); font-family: 'Noto Sans SC', sans-serif; }
+
+  .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 60px 80px;
+    opacity: 0; pointer-events: none;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .slide.is-active { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+  /* Progress bar */
+  .progress-bar { position: fixed; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); transition: width 0.4s ease; z-index: 100; }
+
+  /* Slide counter */
+  .slide-counter {
+    position: fixed; bottom: 20px; right: 30px;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    color: var(--text-muted); z-index: 100;
+  }
+
+  /* Navigation hint */
+  .nav-hint {
+    position: fixed; bottom: 20px; left: 30px;
+    font-size: 12px; color: var(--text-muted); z-index: 100;
+    opacity: 0.6;
+  }
+
+  /* ====== SLIDE 1: COVER ====== */
+  .cover { text-align: center; background: radial-gradient(ellipse at 30% 50%, var(--glow-blue) 0%, transparent 50%), radial-gradient(ellipse at 70% 50%, var(--glow-cyan) 0%, transparent 50%); }
+  .cover .avatar {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px; font-weight: 900; color: white;
+    margin-bottom: 24px; box-shadow: 0 0 40px rgba(59,130,246,0.3);
+  }
+  .cover h1 { font-size: 52px; font-weight: 900; letter-spacing: 4px; margin-bottom: 12px; background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .cover .subtitle { font-size: 22px; color: var(--text-secondary); font-weight: 300; margin-bottom: 32px; letter-spacing: 6px; }
+  .cover .contact-row { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; }
+  .cover .contact-item { font-size: 14px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+  .cover .contact-item span { color: var(--accent-cyan); }
+
+  /* ====== COMMON SECTION STYLES ====== */
+  .section-header { text-align: center; margin-bottom: 40px; width: 100%; }
+  .section-header h2 {
+    font-size: 36px; font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .section-header .divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); margin: 0 auto; border-radius: 2px; }
+
+  .content-area { width: 100%; max-width: 1100px; }
+
+  /* ====== SKILL CHIPS ====== */
+  .skill-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .skill-chip {
+    padding: 8px 20px; border-radius: 20px; font-size: 14px;
+    background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+    color: var(--accent-blue); font-weight: 500;
+    transition: all 0.3s;
+  }
+  .skill-chip.green { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.25); color: var(--accent-green); }
+  .skill-chip.purple { background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.25); color: var(--accent-purple); }
+  .skill-chip.amber { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.25); color: var(--accent-amber); }
+  .skill-chip.rose { background: rgba(244,63,94,0.1); border-color: rgba(244,63,94,0.25); color: var(--accent-rose); }
+  .skill-chip.cyan { background: rgba(6,182,212,0.1); border-color: rgba(6,182,212,0.25); color: var(--accent-cyan); }
+
+  /* ====== PROJECT CARDS ====== */
+  .project-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 32px; margin-bottom: 24px; width: 100%;
+    transition: border-color 0.3s;
+  }
+  .project-card:hover { border-color: var(--accent-blue); }
+  .project-card .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+  .project-card h3 { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+  .project-card .tech-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .project-card .tech-tag { font-size: 11px; padding: 3px 10px; border-radius: 10px; background: rgba(139,92,246,0.15); color: var(--accent-purple); font-family: 'JetBrains Mono', monospace; }
+  .project-card .card-body { font-size: 14px; color: var(--text-secondary); line-height: 1.8; }
+  .project-card .card-body li { margin-bottom: 6px; padding-left: 4px; }
+  .project-card .card-body strong { color: var(--accent-cyan); font-weight: 500; }
+
+  /* ====== TIMELINE ====== */
+  .timeline { position: relative; padding-left: 30px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--accent-blue), var(--accent-cyan)); }
+  .timeline-item { position: relative; margin-bottom: 28px; }
+  .timeline-item::before { content: ''; position: absolute; left: -26px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent-blue); box-shadow: 0 0 10px rgba(59,130,246,0.4); }
+  .timeline-item h3 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+  .timeline-item .meta { font-size: 13px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 8px; }
+  .timeline-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+  /* ====== TWO COLUMN LAYOUT ====== */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; max-width: 1100px; }
+
+  /* ====== STRENGTHS ====== */
+  .strength-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1000px; }
+  .strength-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px; display: flex; gap: 16px; align-items: flex-start;
+    transition: all 0.3s;
+  }
+  .strength-card:hover { border-color: var(--accent-cyan); transform: translateY(-2px); }
+  .strength-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .strength-icon.blue { background: rgba(59,130,246,0.15); }
+  .strength-icon.green { background: rgba(16,185,129,0.15); }
+  .strength-icon.purple { background: rgba(139,92,246,0.15); }
+  .strength-icon.amber { background: rgba(245,158,11,0.15); }
+  .strength-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+  .strength-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+  /* ====== COVER END ====== */
+  .cover-end {
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 50%, var(--glow-blue) 0%, transparent 60%);
+  }
+  .cover-end h2 { font-size: 44px; font-weight: 900; margin-bottom: 16px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .cover-end .tagline { font-size: 18px; color: var(--text-secondary); margin-bottom: 40px; font-weight: 300; }
+  .cover-end .contact-grid { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; }
+  .cover-end .contact-block { text-align: center; }
+  .cover-end .contact-block .label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+  .cover-end .contact-block .value { font-size: 16px; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; }
+
+  /* ====== ANIMATIONS ====== */
+  .slide .anim-item { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .slide.is-active .anim-item { opacity: 1; transform: translateY(0); }
+  .slide.is-active .anim-item:nth-child(1) { transition-delay: 0.1s; }
+  .slide.is-active .anim-item:nth-child(2) { transition-delay: 0.2s; }
+  .slide.is-active .anim-item:nth-child(3) { transition-delay: 0.3s; }
+  .slide.is-active .anim-item:nth-child(4) { transition-delay: 0.4s; }
+  .slide.is-active .anim-item:nth-child(5) { transition-delay: 0.5s; }
+  .slide.is-active .anim-item:nth-child(6) { transition-delay: 0.6s; }
+  .slide.is-active .anim-item:nth-child(7) { transition-delay: 0.7s; }
+  .slide.is-active .anim-item:nth-child(8) { transition-delay: 0.8s; }
+
+  /* Decorative elements */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: -1;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Scrollable slide content */
+  .slide-scroll { overflow-y: auto; max-height: 100%; width: 100%; max-width: 1100px; padding-right: 8px; }
+  .slide-scroll::-webkit-scrollbar { width: 4px; }
+  .slide-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1: COVER -->
+  <section class="slide cover is-active" data-slide="1">
+    <div class="avatar anim-item">甘</div>
+    <h1 class="anim-item">甘浩成</h1>
+    <div class="subtitle anim-item">Java 开发工程师</div>
+    <div class="contact-row anim-item">
+      <div class="contact-item"><span>TEL</span> 18583263973</div>
+      <div class="contact-item"><span>EMAIL</span> dicraft17@outlook.com</div>
+      <div class="contact-item"><span>AGE</span> 25岁</div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: EDUCATION & CERTS -->
+  <section class="slide" data-slide="2">
+    <div class="section-header anim-item">
+      <h2>教育背景 & 资格证书</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="content-area">
+      <div class="timeline">
+        <div class="timeline-item anim-item">
+          <h3>重庆工程学院</h3>
+          <div class="meta">本科 · 软件工程 · 2019 — 2023</div>
+          <p>系统学习计算机科学与软件工程核心课程，奠定扎实的编程基础与工程素养。</p>
+        </div>
+        <div class="timeline-item anim-item">
+          <h3>软件设计师（中级）</h3>
+          <div class="meta">国家级职业资格认证</div>
+          <p>具备软件系统分析、设计与架构能力的权威资质认证。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: TECH SKILLS OVERVIEW -->
+  <section class="slide" data-slide="3">
+    <div class="section-header anim-item">
+      <h2>技术栈全景</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="content-area" style="display:flex;flex-direction:column;gap:24px;">
+      <div class="anim-item">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;">核心语言 & 框架</div>
+        <div class="skill-grid">
+          <div class="skill-chip">Java 核心（集合/并发/JVM）</div>
+          <div class="skill-chip">Spring Boot</div>
+          <div class="skill-chip">Spring MVC</div>
+          <div class="skill-chip">MyBatis-Plus</div>
+          <div class="skill-chip">COLA 架构</div>
+          <div class="skill-chip">LiteFlow</div>
+        </div>
+      </div>
+      <div class="anim-item">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;">数据 & 中间件</div>
+        <div class="skill-grid">
+          <div class="skill-chip green">MySQL（索引/事务/调优）</div>
+          <div class="skill-chip green">Redis（缓存/分布式锁/限流）</div>
+          <div class="skill-chip green">RocketMQ</div>
+          <div class="skill-chip green">Nacos</div>
+          <div class="skill-chip green">Dubbo</div>
+        </div>
+      </div>
+      <div class="anim-item">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;">架构 & 工程能力</div>
+        <div class="skill-grid">
+          <div class="skill-chip purple">微服务架构</div>
+          <div class="skill-chip purple">分布式锁 / 事务 / 任务调度</div>
+          <div class="skill-chip purple">设计模式（状态机/责任链/策略/工厂）</div>
+          <div class="skill-chip purple">DDD 分层架构</div>
+          <div class="skill-chip amber">AI 辅助开发（Cursor/Copilot/Claude）</div>
+          <div class="skill-chip amber">LLM 应用（Spring AI / RAG）</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: WORK EXPERIENCE -->
+  <section class="slide" data-slide="4">
+    <div class="section-header anim-item">
+      <h2>工作经历</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="content-area">
+      <div class="project-card anim-item" style="max-width:700px;margin:0 auto;">
+        <div class="card-header">
+          <h3>杭州端点网络科技有限公司</h3>
+        </div>
+        <div class="card-body">
+          <p style="font-size:15px;color:var(--text-primary);margin-bottom:12px;">开发工程师 · 2023.07 — 至今</p>
+          <p>深度参与公司核心产品的设计与开发，覆盖 ERP 采购、供应链 OMS/WMS、新零售 O2O 等多个业务领域。主导多个核心模块的架构设计与技术攻坚，在高并发、状态机编排、性能优化等方面积累了丰富实战经验。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: PROJECT 1 - 三力士ERP -->
+  <section class="slide" data-slide="5">
+    <div class="section-header anim-item">
+      <h2>项目经验</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="slide-scroll">
+      <div class="project-card anim-item">
+        <div class="card-header">
+          <h3>三力士 ERP 采购模块</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">SpringBoot</span>
+            <span class="tech-tag">MyBatis-Plus</span>
+            <span class="tech-tag">MySQL</span>
+            <span class="tech-tag">Redis</span>
+            <span class="tech-tag">Redisson</span>
+            <span class="tech-tag">RocketMQ</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p style="margin-bottom:12px;color:var(--text-muted);">覆盖采购申请到采购订单的全链路业务</p>
+          <ul style="list-style:none;">
+            <li><strong>采购订单核心模块</strong> — 实现订单四级结构保存与更新，基于 diff 差异化管理行项目；实现订单全生命周期操作（冻结/解冻、手动完成、作废），管理计划行状态自动流转</li>
+            <li><strong>采购申请领域服务</strong> — 实现申请单的创建、提交、复制与作废，管理多种业务状态的状态机流转；支持工序委外场景下基于 BOM 自动生成子项物料</li>
+            <li><strong>价格协议自动匹配</strong> — 支持"最近优先"和"最低价"两种策略，基于物料+采购组织+库存组织三维度检索候选协议</li>
+            <li><strong>配额协议分供方算法</strong> — 采用最小批量分片+比例轮转算法，按目标配额比例循环分配数量至多个供应商</li>
+            <li><strong>跨模块集成</strong> — WBS 项目预算占用与释放、结算确认、交货单自动创建</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: PROJECT 2 - 云仓 OMS/WMS (上) -->
+  <section class="slide" data-slide="6">
+    <div class="section-header anim-item">
+      <h2>项目经验</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="slide-scroll">
+      <div class="project-card anim-item">
+        <div class="card-header">
+          <h3>云仓供应链平台（OMS / WMS）</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">SpringBoot</span>
+            <span class="tech-tag">MyBatis-Plus</span>
+            <span class="tech-tag">Redis</span>
+            <span class="tech-tag">RocketMQ</span>
+            <span class="tech-tag">Nacos</span>
+            <span class="tech-tag">Dubbo</span>
+            <span class="tech-tag">LiteFlow</span>
+            <span class="tech-tag">COLA StateMachine</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p style="margin-bottom:12px;color:var(--text-muted);">一站式数字化供应链服务平台，日处理订单量达万级，覆盖选品、寻源、订单、仓储、配送和退换货全链路</p>
+          <ul style="list-style:none;">
+            <li><strong>订单全生命周期管理</strong> — 基于自研状态机框架管控多类型订单状态流转（平台/店铺/线下订单）；实现自动支付与面单取消手续费校验，区分状态异常与业务异常差异化处理</li>
+            <li><strong>智能分仓算法</strong> — 基于多因子评分模型（库存水位、仓库负载、物流成本、区域覆盖）自动选择最优仓库</li>
+            <li><strong>运费计价引擎</strong> — 支持多维度费率模板（重量区间、区域、物流渠道）</li>
+            <li><strong>责任链重构</strong> — 通过责任链模式重构店铺订单转平台订单流程，基于 LiteFlow 实现订单自动重审链式编排，支持流程热更新</li>
+            <li><strong>线下订单 0→1</strong> — 独立完成线下订单功能开发；实现订单批量导入，通过 MQ 异步解耦 + 多线程分批处理做好幂等与异常隔离</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: PROJECT 2 - 云仓 OMS/WMS (下) -->
+  <section class="slide" data-slide="7">
+    <div class="section-header anim-item">
+      <h2>项目经验（续）</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="slide-scroll">
+      <div class="project-card anim-item">
+        <div class="card-header">
+          <h3>云仓供应链平台 — 仓储 & 性能优化</h3>
+        </div>
+        <div class="card-body">
+          <ul style="list-style:none;">
+            <li><strong>波次模块架构重构</strong> — 引入波次打包验货新流程；通过策略模式 + 工厂模式实现多种 DN 匹配策略，支持按波次类型动态选择最优匹配方案</li>
+            <li><strong>ASN 全流程管理</strong> — 实现到货通知单全流程与物流渠道自选功能；优化批量收货性能，将箱级别数据由逐条更新改为批量聚合，<strong>接口响应时间降低 50%</strong></li>
+            <li><strong>退货工单全流程</strong> — 基于 COLA StateMachine 实现 12 个状态转换节点的完整流转，每个转换配置独立的前置校验与执行动作；通过 MQ 实现与代理仓双向同步，引入分布式锁保障并发一致性</li>
+            <li><strong>慢 SQL 优化专项</strong> — 完成 10+ 条核心查询优化；优化 Excel 批量导出与上架回调性能</li>
+            <li><strong>异常治理</strong> — 自定义 GlobalExceptionHandler 推动业务异常日志分级治理（高频异常降为 warn）；设计分布式锁注解（Redisson + SPEL + AOP），在高并发场景广泛应用</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: PROJECT 3 - 赵一鸣 -->
+  <section class="slide" data-slide="8">
+    <div class="section-header anim-item">
+      <h2>项目经验</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="slide-scroll">
+      <div class="project-card anim-item">
+        <div class="card-header">
+          <h3>赵一鸣零食 O2O / 零食很忙会员</h3>
+          <div class="tech-tags">
+            <span class="tech-tag">SpringBoot</span>
+            <span class="tech-tag">MyBatis-Plus</span>
+            <span class="tech-tag">MySQL</span>
+            <span class="tech-tag">Redis</span>
+            <span class="tech-tag">RocketMQ</span>
+            <span class="tech-tag">Nacos</span>
+            <span class="tech-tag">Dubbo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p style="margin-bottom:12px;color:var(--text-muted);">新零售转型项目，实现线上下单线下自提的融合模式，构建统一业务中台，打通线上线下门店、营促销策略和会员体系。</p>
+          <ul style="list-style:none;">
+            <li><strong>统一发券逻辑</strong> — 统一线上线下发券逻辑，高并发场景下使用 Redis 预分配库存方案优先扣减缓存，定期同步数据库，优化后 <strong>TPS > 200，RT < 500ms</strong></li>
+            <li><strong>秒杀直降活动保障</strong> — 通过异常捕获将失败任务存入 Redis，由补偿定时任务读取并重试，保障活动健壮性</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 9: STRENGTHS -->
+  <section class="slide" data-slide="9">
+    <div class="section-header anim-item">
+      <h2>个人优势</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="strength-grid">
+      <div class="strength-card anim-item">
+        <div class="strength-icon blue">&#9881;</div>
+        <div>
+          <h4>深耕供应链领域</h4>
+          <p>熟悉 OMS/WMS 全链路业务及采购申请→采购订单全流程，有大型 Java 项目核心模块设计与开发经验</p>
+        </div>
+      </div>
+      <div class="strength-card anim-item">
+        <div class="strength-icon green">&#9733;</div>
+        <div>
+          <h4>架构设计能力</h4>
+          <p>善于运用策略、责任链、状态机、工厂等设计模式和架构思想解决复杂业务系统问题</p>
+        </div>
+      </div>
+      <div class="strength-card anim-item">
+        <div class="strength-icon purple">&#9889;</div>
+        <div>
+          <h4>性能与稳定性实战</h4>
+          <p>慢 SQL 优化、并发安全、异常治理、异步编排等性能与稳定性实战经验丰富</p>
+        </div>
+      </div>
+      <div class="strength-card anim-item">
+        <div class="strength-icon amber">&#128161;</div>
+        <div>
+          <h4>AI 工程化落地</h4>
+          <p>熟练使用 AI 辅助开发工具提升编码效率，了解 LLM 应用开发与 RAG 技术</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: END -->
+  <section class="slide cover-end" data-slide="10">
+    <h2 class="anim-item">感谢阅读</h2>
+    <div class="tagline anim-item">期待与您深入交流</div>
+    <div class="contact-grid anim-item">
+      <div class="contact-block">
+        <div class="label">电话</div>
+        <div class="value">18583263973</div>
+      </div>
+      <div class="contact-block">
+        <div class="label">邮箱</div>
+        <div class="value">dicraft17@outlook.com</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter">1 / 10</div>
+<div class="nav-hint">← → 翻页 · F 全屏</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function goto(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('is-active');
+    current = n;
+    slides[current].classList.add('is-active');
+    document.getElementById('progressBar').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + total;
+    // Reset animations
+    slides[current].querySelectorAll('.anim-item').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      void el.offsetWidth;
+      el.style.opacity = '';
+      el.style.transform = '';
+    });
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); goto(current + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); goto(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); goto(0); }
+    else if (e.key === 'End') { e.preventDefault(); goto(total - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+
+  // Touch support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? goto(current + 1) : goto(current - 1); }
+  });
+
+  // Hash deep-link
+  const hash = parseInt(location.hash.replace('#/', ''));
+  if (hash >= 1 && hash <= total) goto(hash - 1);
+
+  // Init
+  document.getElementById('progressBar').style.width = (1 / total * 100) + '%';
+})();
+</script>
+</body>
+</html>
