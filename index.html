@@ -439,7 +439,7 @@
         <div class="card-body">
           <p style="margin-bottom:12px;color:var(--text-muted);">新零售转型项目，实现线上下单线下自提的融合模式，构建统一业务中台，打通线上线下门店、营促销策略和会员体系。</p>
           <ul style="list-style:none;">
-            <li><strong>统一发券逻辑</strong> — 统一线上线下发券逻辑，高并发场景下使用 Redis 预分配库存方案优先扣减缓存，定期同步数据库，优化后 <strong>TPS > 200，RT < 500ms</strong></li>
+            <li><strong>统一发券逻辑</strong> — 统一线上线下发券逻辑，高并发场景下使用 Redis 预分配库存方案优先扣减缓存，定期同步数据库，优化后 <strong>TPS > 200，RT < 200ms</strong></li>
             <li><strong>秒杀直降活动保障</strong> — 通过异常捕获将失败任务存入 Redis，由补偿定时任务读取并重试，保障活动健壮性</li>
           </ul>
         </div>
