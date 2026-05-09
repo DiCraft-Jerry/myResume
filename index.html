@@ -176,9 +176,63 @@
   }
 
   /* Scrollable slide content */
-  .slide-scroll { overflow-y: auto; max-height: 100%; width: 100%; max-width: 1100px; padding-right: 8px; }
+  .slide-scroll { overflow-y: auto; max-height: 100%; width: 100%; max-width: 1100px; padding-right: 8px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .slide-scroll::-webkit-scrollbar { width: 4px; }
   .slide-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ====== MOBILE RESPONSIVE ====== */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 20px; }
+
+    /* Cover */
+    .cover .avatar { width: 80px; height: 80px; font-size: 32px; margin-bottom: 16px; }
+    .cover h1 { font-size: 32px; letter-spacing: 2px; }
+    .cover .subtitle { font-size: 16px; letter-spacing: 3px; margin-bottom: 20px; }
+    .cover .contact-row { flex-direction: column; gap: 10px; align-items: center; }
+    .cover .contact-item { font-size: 12px; }
+
+    /* Section headers */
+    .section-header { margin-bottom: 24px; }
+    .section-header h2 { font-size: 24px; }
+
+    /* Skill chips */
+    .skill-grid { gap: 8px; }
+    .skill-chip { padding: 6px 14px; font-size: 12px; }
+
+    /* Project cards */
+    .project-card { padding: 20px; margin-bottom: 16px; border-radius: 12px; }
+    .project-card h3 { font-size: 17px; }
+    .project-card .card-body { font-size: 13px; line-height: 1.7; }
+    .project-card .tech-tag { font-size: 10px; padding: 2px 8px; }
+
+    /* Timeline */
+    .timeline { padding-left: 24px; }
+    .timeline-item { margin-bottom: 20px; }
+    .timeline-item::before { left: -20px; width: 10px; height: 10px; }
+    .timeline-item h3 { font-size: 16px; }
+    .timeline-item .meta { font-size: 12px; }
+    .timeline-item p { font-size: 13px; }
+
+    /* Strengths */
+    .strength-grid { grid-template-columns: 1fr; gap: 12px; }
+    .strength-card { padding: 16px; gap: 12px; }
+    .strength-icon { width: 36px; height: 36px; font-size: 18px; }
+    .strength-card h4 { font-size: 14px; }
+    .strength-card p { font-size: 12px; }
+
+    /* Two column */
+    .two-col { grid-template-columns: 1fr; gap: 16px; }
+
+    /* Cover end */
+    .cover-end h2 { font-size: 28px; }
+    .cover-end .tagline { font-size: 15px; margin-bottom: 28px; }
+    .cover-end .contact-grid { gap: 24px; }
+    .cover-end .contact-block .value { font-size: 14px; }
+
+    /* Nav elements */
+    .slide-counter { bottom: 12px; right: 16px; font-size: 11px; }
+    .nav-hint { bottom: 12px; left: 16px; font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -234,9 +288,8 @@
           <div class="skill-chip">Java 核心（集合/并发/JVM）</div>
           <div class="skill-chip">Spring Boot</div>
           <div class="skill-chip">Spring MVC</div>
+          <div class="skill-chip">Spring AOP / SPEL</div>
           <div class="skill-chip">MyBatis-Plus</div>
-          <div class="skill-chip">COLA 架构</div>
-          <div class="skill-chip">LiteFlow</div>
         </div>
       </div>
       <div class="anim-item">
@@ -244,15 +297,15 @@
         <div class="skill-grid">
           <div class="skill-chip green">MySQL（索引/事务/调优）</div>
           <div class="skill-chip green">Redis（缓存/分布式锁/限流）</div>
+          <div class="skill-chip green">Redisson</div>
           <div class="skill-chip green">RocketMQ</div>
-          <div class="skill-chip green">Nacos</div>
-          <div class="skill-chip green">Dubbo</div>
+          <div class="skill-chip green">OpenFeign</div>
         </div>
       </div>
       <div class="anim-item">
         <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;">架构 & 工程能力</div>
         <div class="skill-grid">
-          <div class="skill-chip purple">微服务架构</div>
+          <div class="skill-chip purple">微服务架构（注册发现/限流/熔断/降级）</div>
           <div class="skill-chip purple">分布式锁 / 事务 / 任务调度</div>
           <div class="skill-chip purple">设计模式（状态机/责任链/策略/工厂）</div>
           <div class="skill-chip purple">DDD 分层架构</div>
@@ -294,28 +347,29 @@
           <h3>三力士 ERP 采购模块</h3>
           <div class="tech-tags">
             <span class="tech-tag">SpringBoot</span>
+            <span class="tech-tag">Trantor2</span>
             <span class="tech-tag">MyBatis-Plus</span>
             <span class="tech-tag">MySQL</span>
             <span class="tech-tag">Redis</span>
             <span class="tech-tag">Redisson</span>
             <span class="tech-tag">RocketMQ</span>
+            <span class="tech-tag">Erda</span>
           </div>
         </div>
         <div class="card-body">
-          <p style="margin-bottom:12px;color:var(--text-muted);">覆盖采购申请到采购订单的全链路业务</p>
+          <p style="margin-bottom:12px;color:var(--text-muted);">覆盖采购申请到采购订单的全链路业务，对接 SRM 寻源、库存 ATP、交货单、组织架构等外部模块</p>
           <ul style="list-style:none;">
-            <li><strong>采购订单核心模块</strong> — 实现订单四级结构保存与更新，基于 diff 差异化管理行项目；实现订单全生命周期操作（冻结/解冻、手动完成、作废），管理计划行状态自动流转</li>
-            <li><strong>采购申请领域服务</strong> — 实现申请单的创建、提交、复制与作废，管理多种业务状态的状态机流转；支持工序委外场景下基于 BOM 自动生成子项物料</li>
-            <li><strong>价格协议自动匹配</strong> — 支持"最近优先"和"最低价"两种策略，基于物料+采购组织+库存组织三维度检索候选协议</li>
-            <li><strong>配额协议分供方算法</strong> — 采用最小批量分片+比例轮转算法，按目标配额比例循环分配数量至多个供应商</li>
-            <li><strong>跨模块集成</strong> — WBS 项目预算占用与释放、结算确认、交货单自动创建</li>
+            <li><strong>采购订单提交链路编排</strong> — 完成校验→金额构建→自动定价→逆向退货数量校验→正向/逆向/调拨订单的库存 ATP 占用→支付计划行保存→申请未清数量清空→RocketMQ 消息通知</li>
+            <li><strong>采购申请定制开发</strong> — 实现申请行转 SRM 寻源任务，将申请行数据转换为寻源询价任务并回写寻源编码；实现申请编码自动初始化、默认公司组织解析、基于组织层级递归查询采购员等功能</li>
+            <li><strong>月度采购统计与年度对比</strong> — 按物料+月份聚合已完成订单行的采购量、采购额、均价，通过 Redisson 分布式锁防止同年并发计算冲突；年度查询支持 12 个月数据透视与同比成本差异分析</li>
+            <li><strong>供应商交期提醒</strong> — 通过组织架构查询采购员、通过合作伙伴关联表查询供应商联系人，使用 NoticeService 双向推送提醒通知</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SLIDE 6: PROJECT 2 - 云仓 OMS/WMS (上) -->
+  <!-- SLIDE 6: PROJECT 2 - 云仓 OMS/WMS -->
   <section class="slide" data-slide="6">
     <div class="section-header anim-item">
       <h2>项目经验</h2>
@@ -327,13 +381,18 @@
           <h3>云仓供应链平台（OMS / WMS）</h3>
           <div class="tech-tags">
             <span class="tech-tag">SpringBoot</span>
+            <span class="tech-tag">Trantor2</span>
             <span class="tech-tag">MyBatis-Plus</span>
+            <span class="tech-tag">MySQL</span>
             <span class="tech-tag">Redis</span>
+            <span class="tech-tag">Redisson</span>
             <span class="tech-tag">RocketMQ</span>
             <span class="tech-tag">Nacos</span>
-            <span class="tech-tag">Dubbo</span>
+            <span class="tech-tag">OpenFeign</span>
             <span class="tech-tag">LiteFlow</span>
             <span class="tech-tag">COLA StateMachine</span>
+            <span class="tech-tag">DynamicTP</span>
+            <span class="tech-tag">Erda</span>
           </div>
         </div>
         <div class="card-body">
@@ -344,38 +403,19 @@
             <li><strong>运费计价引擎</strong> — 支持多维度费率模板（重量区间、区域、物流渠道）</li>
             <li><strong>责任链重构</strong> — 通过责任链模式重构店铺订单转平台订单流程，基于 LiteFlow 实现订单自动重审链式编排，支持流程热更新</li>
             <li><strong>线下订单 0→1</strong> — 独立完成线下订单功能开发；实现订单批量导入，通过 MQ 异步解耦 + 多线程分批处理做好幂等与异常隔离</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE 7: PROJECT 2 - 云仓 OMS/WMS (下) -->
-  <section class="slide" data-slide="7">
-    <div class="section-header anim-item">
-      <h2>项目经验（续）</h2>
-      <div class="divider"></div>
-    </div>
-    <div class="slide-scroll">
-      <div class="project-card anim-item">
-        <div class="card-header">
-          <h3>云仓供应链平台 — 仓储 & 性能优化</h3>
-        </div>
-        <div class="card-body">
-          <ul style="list-style:none;">
             <li><strong>波次模块架构重构</strong> — 引入波次打包验货新流程；通过策略模式 + 工厂模式实现多种 DN 匹配策略，支持按波次类型动态选择最优匹配方案</li>
             <li><strong>ASN 全流程管理</strong> — 实现到货通知单全流程与物流渠道自选功能；优化批量收货性能，将箱级别数据由逐条更新改为批量聚合，<strong>接口响应时间降低 50%</strong></li>
-            <li><strong>退货工单全流程</strong> — 基于 COLA StateMachine 实现 12 个状态转换节点的完整流转，每个转换配置独立的前置校验与执行动作；通过 MQ 实现与代理仓双向同步，引入分布式锁保障并发一致性</li>
-            <li><strong>慢 SQL 优化专项</strong> — 完成 10+ 条核心查询优化；优化 Excel 批量导出与上架回调性能</li>
-            <li><strong>异常治理</strong> — 自定义 GlobalExceptionHandler 推动业务异常日志分级治理（高频异常降为 warn）；设计分布式锁注解（Redisson + SPEL + AOP），在高并发场景广泛应用</li>
+            <li><strong>退货工单全流程</strong> — 基于 COLA StateMachine 与自研状态机实现 12 个状态转换节点的完整流转，每个转换配置独立的前置校验与执行动作，定义 9 种上下文对象实现参数隔离；通过 MQ 实现与代理仓双向同步，引入分布式锁保障并发一致性</li>
+            <li><strong>慢 SQL 监控与优化</strong> — 自研慢 SQL 监控组件（MyBatis Interceptor + 钉钉告警 + 滑动窗口频率统计），主导慢 SQL 优化专项完成 10+ 条核心查询优化；优化 Excel 批量导出与上架回调性能</li>
+            <li><strong>异常治理</strong> — 自定义 GlobalExceptionHandler 推动业务异常日志分级治理（高频异常降为 warn），实现非关键链路异常降级；设计分布式锁注解（Redisson + SPEL + AOP），在订单、退货、波次等高并发场景广泛应用</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SLIDE 8: PROJECT 3 - 赵一鸣 -->
-  <section class="slide" data-slide="8">
+  <!-- SLIDE 7: PROJECT 3 - 赵一鸣 -->
+  <section class="slide" data-slide="7">
     <div class="section-header anim-item">
       <h2>项目经验</h2>
       <div class="divider"></div>
@@ -386,12 +426,14 @@
           <h3>赵一鸣零食 O2O / 零食很忙会员</h3>
           <div class="tech-tags">
             <span class="tech-tag">SpringBoot</span>
+            <span class="tech-tag">Trantor</span>
             <span class="tech-tag">MyBatis-Plus</span>
             <span class="tech-tag">MySQL</span>
             <span class="tech-tag">Redis</span>
             <span class="tech-tag">RocketMQ</span>
             <span class="tech-tag">Nacos</span>
             <span class="tech-tag">Dubbo</span>
+            <span class="tech-tag">Erda</span>
           </div>
         </div>
         <div class="card-body">
@@ -405,8 +447,8 @@
     </div>
   </section>
 
-  <!-- SLIDE 9: STRENGTHS -->
-  <section class="slide" data-slide="9">
+  <!-- SLIDE 8: STRENGTHS -->
+  <section class="slide" data-slide="8">
     <div class="section-header anim-item">
       <h2>个人优势</h2>
       <div class="divider"></div>
@@ -443,8 +485,8 @@
     </div>
   </section>
 
-  <!-- SLIDE 10: END -->
-  <section class="slide cover-end" data-slide="10">
+  <!-- SLIDE 9: END -->
+  <section class="slide cover-end" data-slide="9">
     <h2 class="anim-item">感谢阅读</h2>
     <div class="tagline anim-item">期待与您深入交流</div>
     <div class="contact-grid anim-item">
@@ -462,8 +504,8 @@
 </div>
 
 <div class="progress-bar" id="progressBar"></div>
-<div class="slide-counter" id="slideCounter">1 / 10</div>
-<div class="nav-hint">← → 翻页 · F 全屏</div>
+<div class="slide-counter" id="slideCounter">1 / 9</div>
+<div class="nav-hint" id="navHint">← → 翻页 · F 全屏</div>
 
 <script>
 (function() {
@@ -500,11 +542,21 @@
   });
 
   // Touch support
-  let touchStartX = 0;
-  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; });
   document.addEventListener('touchend', e => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) { diff > 0 ? goto(current + 1) : goto(current - 1); }
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    // Only navigate on horizontal swipe or vertical swipe that's not inside a scrollable area
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx > 0 ? goto(current + 1) : goto(current - 1);
+    } else if (Math.abs(dy) > 80 && Math.abs(dy) > Math.abs(dx)) {
+      // Check if the swipe target is inside a scrollable container
+      const scrollEl = e.target.closest('.slide-scroll');
+      if (!scrollEl || (dy > 0 && scrollEl.scrollTop <= 0) || (dy < 0 && scrollEl.scrollTop + scrollEl.clientHeight >= scrollEl.scrollHeight)) {
+        dy > 0 ? goto(current + 1) : goto(current - 1);
+      }
+    }
   });
 
   // Hash deep-link
@@ -513,6 +565,11 @@
 
   // Init
   document.getElementById('progressBar').style.width = (1 / total * 100) + '%';
+
+  // Update nav hint for mobile
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    document.getElementById('navHint').textContent = '← → 滑动翻页';
+  }
 })();
 </script>
 </body>
